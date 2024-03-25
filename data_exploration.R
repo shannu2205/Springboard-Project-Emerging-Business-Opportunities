@@ -5,6 +5,7 @@ library(dplyr)
 library(ggplot2)
 
 
+
 # Import data frames ######################################
 google_search_data <- read_csv("Data/google_search_data.csv")
 product_manufacturer_list <- read_csv("Data/product_manufacturer_list.csv")
@@ -125,6 +126,8 @@ ggplot(sales_data, aes(y = log(sales_units_value)))+
 
 
 ## Further analysis on google_search_data #############
+
+nrow(google_search_data[is.na(google_search_data$Claim_ID), ]) #0
 table(google_search_data$platform)
 # Frequency google > amazon > chewy > walmart
 
@@ -171,6 +174,13 @@ ggplot(vendors_freq, aes(x = vendor, y = Frequency)) +
 
 
 ## Further analysis on social_media_data ###################
+
+nrow(social_media_data[is.na(social_media_data$`Theme Id`), ]) #218511
+
+# around 41% of rows are having NA in Theme Id field.
+# Since we cannot remove around 41% of whole data and
+# As we have separate claim category as no claim we can add these NA values as no claim.
+social_media_data$`Theme Id`[is.na(social_media_data$`Theme Id`)] = 0
 
 no_posts = social_media_data[social_media_data$total_post == 0, ]
 nrow(no_posts) # 87364
